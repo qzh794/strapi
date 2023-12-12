@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "e_books",
+  "info": {
+    "singularName": "e-book",
+    "pluralName": "e-books",
+    "displayName": "eBook",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "category1Id": {
+      "type": "string",
+      "default": "211"
+    },
+    "description": {
+      "type": "text"
+    },
+    "cover": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "docCount": {
+      "type": "string",
+      "default": "5"
+    },
+    "viewCount": {
+      "type": "string"
+    },
+    "voteCount": {
+      "type": "string",
+      "default": "1007"
+    },
+    "category2Id": {
+      "type": "string"
+    }
+  }
+}
