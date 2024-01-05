@@ -362,104 +362,6 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
-export interface ApiEBookEBook extends Schema.CollectionType {
-  collectionName: 'e_books';
-  info: {
-    singularName: 'e-book';
-    pluralName: 'e-books';
-    displayName: 'eBook';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    name: Attribute.String;
-    category1Id: Attribute.String & Attribute.DefaultTo<'211'>;
-    description: Attribute.Text;
-    cover: Attribute.Media;
-    docCount: Attribute.String & Attribute.DefaultTo<'5'>;
-    viewCount: Attribute.String;
-    voteCount: Attribute.String & Attribute.DefaultTo<'1007'>;
-    category2Id: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::e-book.e-book',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::e-book.e-book',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiInfoInfo extends Schema.CollectionType {
-  collectionName: 'infos';
-  info: {
-    singularName: 'info';
-    pluralName: 'infos';
-    displayName: 'info';
-    description: '';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    username: Attribute.String & Attribute.Required & Attribute.Unique;
-    email: Attribute.String & Attribute.Required & Attribute.Unique;
-    avatar: Attribute.Media;
-    sex: Attribute.String;
-    roles: Attribute.JSON;
-    authBtnList: Attribute.JSON;
-    nickname: Attribute.String;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<'api::info.info', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<'api::info.info', 'oneToOne', 'admin::user'> &
-      Attribute.Private;
-  };
-}
-
-export interface ApiNoticeNotice extends Schema.CollectionType {
-  collectionName: 'notices';
-  info: {
-    singularName: 'notice';
-    pluralName: 'notices';
-    displayName: 'notice';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    title: Attribute.String & Attribute.Unique;
-    content: Attribute.Text;
-    sort: Attribute.String;
-    onlyId: Attribute.UID<'api::notice.notice', 'title'>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::notice.notice',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::notice.notice',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -712,6 +614,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    web_admin: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::web-admin.web-admin'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -722,6 +629,46 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'plugin::users-permissions.user',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginGoogleMapsConfig extends Schema.SingleType {
+  collectionName: 'google_maps_configs';
+  info: {
+    singularName: 'config';
+    pluralName: 'configs';
+    displayName: 'Google Maps Config';
+  };
+  options: {
+    populateCreatorFields: false;
+    draftAndPublish: false;
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    googleMapsKey: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<''>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::google-maps.config',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::google-maps.config',
       'oneToOne',
       'admin::user'
     > &
@@ -766,6 +713,155 @@ export interface PluginI18NLocale extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'plugin::i18n.locale',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginCommentManagerComment extends Schema.CollectionType {
+  collectionName: 'comments';
+  info: {
+    singularName: 'comment';
+    pluralName: 'comments';
+    displayName: 'Comment';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+    comment: '';
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    content: Attribute.Text;
+    author: Attribute.Relation<
+      'plugin::comment-manager.comment',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    subcomments: Attribute.Relation<
+      'plugin::comment-manager.comment',
+      'oneToMany',
+      'plugin::comment-manager.subcomment'
+    >;
+    from_admin: Attribute.Boolean;
+    related_to: Attribute.Relation<
+      'plugin::comment-manager.comment',
+      'manyToOne',
+      'plugin::comment-manager.content-id'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::comment-manager.comment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::comment-manager.comment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginCommentManagerSubcomment extends Schema.CollectionType {
+  collectionName: 'subcomments';
+  info: {
+    singularName: 'subcomment';
+    pluralName: 'subcomments';
+    displayName: 'Subcomment';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+    comment: '';
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    content: Attribute.Text;
+    author: Attribute.Relation<
+      'plugin::comment-manager.subcomment',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    parent_comment: Attribute.Relation<
+      'plugin::comment-manager.subcomment',
+      'manyToOne',
+      'plugin::comment-manager.comment'
+    >;
+    from_admin: Attribute.Boolean;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::comment-manager.subcomment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::comment-manager.subcomment',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface PluginCommentManagerContentId extends Schema.CollectionType {
+  collectionName: 'content_ids';
+  info: {
+    singularName: 'content-id';
+    pluralName: 'content-ids';
+    displayName: 'ContentID';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+    comment: '';
+  };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
+  attributes: {
+    slug: Attribute.String & Attribute.Unique;
+    comments: Attribute.Relation<
+      'plugin::comment-manager.content-id',
+      'oneToMany',
+      'plugin::comment-manager.comment'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'plugin::comment-manager.content-id',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'plugin::comment-manager.content-id',
       'oneToOne',
       'admin::user'
     > &
@@ -888,6 +984,180 @@ export interface PluginCommentsCommentReport extends Schema.CollectionType {
   };
 }
 
+export interface ApiEBookEBook extends Schema.CollectionType {
+  collectionName: 'e_books';
+  info: {
+    singularName: 'e-book';
+    pluralName: 'e-books';
+    displayName: 'eBook';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    name: Attribute.String;
+    category1Id: Attribute.String & Attribute.DefaultTo<'211'>;
+    description: Attribute.Text;
+    cover: Attribute.Media;
+    docCount: Attribute.String & Attribute.DefaultTo<'5'>;
+    viewCount: Attribute.String;
+    voteCount: Attribute.String & Attribute.DefaultTo<'1007'>;
+    category2Id: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::e-book.e-book',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::e-book.e-book',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiGoodsCategoryGoodsCategory extends Schema.CollectionType {
+  collectionName: 'goods_categories';
+  info: {
+    singularName: 'goods-category';
+    pluralName: 'goods-categories';
+    displayName: 'goodsCategory';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    categoryName: Attribute.String & Attribute.Required & Attribute.Unique;
+    orderNum: Attribute.Integer & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::goods-category.goods-category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::goods-category.goods-category',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiWebAdminWebAdmin extends Schema.CollectionType {
+  collectionName: 'web_admins';
+  info: {
+    singularName: 'web-admin';
+    pluralName: 'web-admins';
+    displayName: 'webAdmin';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    nickname: Attribute.String & Attribute.Required & Attribute.Unique;
+    users_permissions_user: Attribute.Relation<
+      'api::web-admin.web-admin',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    sex: Attribute.JSON &
+      Attribute.CustomField<'plugin::multi-select.multi-select', ['0', '1']>;
+    blocked: Attribute.JSON &
+      Attribute.Required &
+      Attribute.CustomField<'plugin::multi-select.multi-select', ['0', '1']>;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::web-admin.web-admin',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::web-admin.web-admin',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiWebAdminInfoWebAdminInfo extends Schema.CollectionType {
+  collectionName: 'web_admin_infos';
+  info: {
+    singularName: 'web-admin-info';
+    pluralName: 'web-admin-infos';
+    displayName: 'webAdminInfo';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    nickname: Attribute.String & Attribute.Required & Attribute.Unique;
+    email: Attribute.Email & Attribute.Required & Attribute.Unique;
+    sex: Attribute.Boolean;
+    avatar: Attribute.Media;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::web-admin-info.web-admin-info',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::web-admin-info.web-admin-info',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiWxUserWxUser extends Schema.CollectionType {
+  collectionName: 'wx_users';
+  info: {
+    singularName: 'wx-user';
+    pluralName: 'wx-users';
+    displayName: 'wxUser';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    username: Attribute.String & Attribute.Required & Attribute.Unique;
+    password: Attribute.Password & Attribute.Required;
+    blocked: Attribute.Boolean & Attribute.DefaultTo<false>;
+    email: Attribute.Email & Attribute.Required;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::wx-user.wx-user',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::wx-user.wx-user',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 declare module '@strapi/types' {
   export module Shared {
     export interface ContentTypes {
@@ -898,17 +1168,23 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
-      'api::e-book.e-book': ApiEBookEBook;
-      'api::info.info': ApiInfoInfo;
-      'api::notice.notice': ApiNoticeNotice;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::users-permissions.permission': PluginUsersPermissionsPermission;
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
+      'plugin::google-maps.config': PluginGoogleMapsConfig;
       'plugin::i18n.locale': PluginI18NLocale;
+      'plugin::comment-manager.comment': PluginCommentManagerComment;
+      'plugin::comment-manager.subcomment': PluginCommentManagerSubcomment;
+      'plugin::comment-manager.content-id': PluginCommentManagerContentId;
       'plugin::comments.comment': PluginCommentsComment;
       'plugin::comments.comment-report': PluginCommentsCommentReport;
+      'api::e-book.e-book': ApiEBookEBook;
+      'api::goods-category.goods-category': ApiGoodsCategoryGoodsCategory;
+      'api::web-admin.web-admin': ApiWebAdminWebAdmin;
+      'api::web-admin-info.web-admin-info': ApiWebAdminInfoWebAdminInfo;
+      'api::wx-user.wx-user': ApiWxUserWxUser;
     }
   }
 }

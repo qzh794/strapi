@@ -63,6 +63,12 @@
       "target": "plugin::users-permissions.role",
       "inversedBy": "users",
       "configurable": false
+    },
+    "web_admin": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::web-admin.web-admin",
+      "mappedBy": "users_permissions_user"
     }
   }
 }

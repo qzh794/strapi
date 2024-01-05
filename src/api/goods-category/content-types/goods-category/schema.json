@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "goods_categories",
+  "info": {
+    "singularName": "goods-category",
+    "pluralName": "goods-categories",
+    "displayName": "goodsCategory",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "categoryName": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "orderNum": {
+      "type": "integer",
+      "required": true,
+      "unique": false
+    }
+  }
+}

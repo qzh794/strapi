@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "web_admins",
+  "info": {
+    "singularName": "web-admin",
+    "pluralName": "web-admins",
+    "displayName": "webAdmin",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nickname": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "web_admin"
+    },
+    "sex": {
+      "type": "customField",
+      "options": [
+        "0",
+        "1"
+      ],
+      "customField": "plugin::multi-select.multi-select"
+    },
+    "blocked": {
+      "type": "customField",
+      "options": [
+        "0",
+        "1"
+      ],
+      "required": true,
+      "customField": "plugin::multi-select.multi-select"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wx_users",
+  "info": {
+    "singularName": "wx-user",
+    "pluralName": "wx-users",
+    "displayName": "wxUser",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "username": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "password": {
+      "type": "password",
+      "required": true
+    },
+    "blocked": {
+      "type": "boolean",
+      "default": false
+    },
+    "email": {
+      "type": "email",
+      "required": true
+    }
+  }
+}

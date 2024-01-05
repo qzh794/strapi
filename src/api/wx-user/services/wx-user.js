@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * notice service
+ * wx-user service
  */
 
 const { createCoreService } = require('@strapi/strapi').factories;
 
-module.exports = createCoreService('api::notice.notice');
+module.exports = createCoreService('api::wx-user.wx-user');

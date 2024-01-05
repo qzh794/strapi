@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * notice router
+ * wx-user router
  */
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::notice.notice');
+module.exports = createCoreRouter('api::wx-user.wx-user');

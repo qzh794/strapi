@@ -11,6 +11,11 @@ module.exports = ({ env }) => ({
       },
     },
   },
+  // 谷歌地图
+  // 'google-maps': {
+  //   enabled: true,
+  //   resolve: './src/plugins/strapi-google-maps',
+  // },
   // jwt配置
   'users-permissions': {
     config: {

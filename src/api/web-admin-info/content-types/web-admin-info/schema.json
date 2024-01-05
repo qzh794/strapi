@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "web_admin_infos",
+  "info": {
+    "singularName": "web-admin-info",
+    "pluralName": "web-admin-infos",
+    "displayName": "webAdminInfo",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nickname": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true
+    },
+    "sex": {
+      "type": "boolean"
+    },
+    "avatar": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}
