@@ -69,6 +69,12 @@
       "relation": "oneToOne",
       "target": "api::web-admin.web-admin",
       "mappedBy": "users_permissions_user"
+    },
+    "articles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::article.article",
+      "mappedBy": "users_permissions_user"
     }
   }
 }

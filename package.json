@@ -10,7 +10,6 @@
     "strapi": "strapi"
   },
   "dependencies": {
-    "@amicaldo/strapi-google-maps": "^1.1.3",
     "@strapi/plugin-cloud": "4.15.5",
     "@strapi/plugin-i18n": "4.15.5",
     "@strapi/plugin-users-permissions": "4.15.5",
@@ -21,8 +20,6 @@
     "react-dom": "^18.0.0",
     "react-router-dom": "5.3.4",
     "save": "^2.9.0",
-    "strapi-plugin-comment-manager": "^1.0.17",
-    "strapi-plugin-comments": "^2.2.15",
     "strapi-plugin-entity-relationship-chart": "^4.14.6",
     "strapi-plugin-import-export-entries": "^1.22.0",
     "strapi-plugin-multi-select": "^1.2.2",

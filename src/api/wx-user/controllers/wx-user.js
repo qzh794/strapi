@@ -12,14 +12,23 @@ module.exports = createCoreController("api::wx-user.wx-user", ({ strapi }) => ({
     // 获取该数据表的实例
     const wxUsersModel = strapi.db.query("api::wx-user.wx-user");
     // 获取请求体里的数据
-    const { username, password, email,repassword } = ctx.request.body;
+    const { name, password, email, repassword } = ctx.request.body;
+
+    // 检查 name 是否存在且不为空
+    if (!name || name.trim().length === 0) {
+      return {
+        msg: "用户名不能为空",
+        code: 4000,
+        data: null,
+      };
+    }
     // 用数据表的实例调用findOne方法
     const user = await wxUsersModel.findOne({
-      // 查询到username或者email
+      // 查询到name与email
       where: {
-        $or: [
+        $and: [
           {
-            username,
+            name,
           },
           {
             email,
@@ -35,22 +44,22 @@ module.exports = createCoreController("api::wx-user.wx-user", ({ strapi }) => ({
         data: null,
       };
     }
-    if(password!=repassword){
-      return{
-        msg:"两次密码不一致",
-        code:4000,
-        data:null
-      }
+    if (password != repassword) {
+      return {
+        msg: "两次密码不一致",
+        code: 4000,
+        data: null,
+      };
     }
     // 调用create方法创建数据
     const result = await wxUsersModel.create({
       // 只返回这些字段
-      // select: ["username", "email","blocked"],
+      // select: ["name", "email","blocked"],
       // 插入的数据并返回，如果有select，则返回值只有select里的，否则返回全部字段
       data: {
-        username,
+        name,
         email,
-        password: bcrypt.hashSync(password, 10),
+        password: bcrypt.hashSync(password, 10)
       },
     });
 
@@ -65,19 +74,20 @@ module.exports = createCoreController("api::wx-user.wx-user", ({ strapi }) => ({
     // 获取该数据表的实例
     const wxUsersModel = strapi.db.query("api::wx-user.wx-user");
     // 获取请求体里的数据
-    const { username, password,email } = ctx.request.body;
+    const { name, password, email } = ctx.request.body;
     // 用数据表的实例调用findOne方法
     const result = await wxUsersModel.findOne({
-      // 查询到username或者email
+      // 查询到name或者email
       where: {
         $and: [
           {
-            username,
+            name,
           },
           {
             email,
           },
-      ]}
+        ],
+      },
     });
     if (result) {
       if (!bcrypt.compareSync(password, result.password)) {
@@ -94,12 +104,13 @@ module.exports = createCoreController("api::wx-user.wx-user", ({ strapi }) => ({
           data: null,
         };
       }
-      const token="6e9801682e1c89e076de79ed1b8cbf72dad8b37b2e3634531650a22c6ae9206d61deef6f8b62498264fc305dbc312774cd9ff7ae5a505dee101f24492a08e43f0d99dbe68dec9a20b671e298afb2e92ddb07705ff94fd8b2ec726e77b56a18c79302030d977224bb8c314a2d6e99bd5d11188e93968ad00f7507f7af1bf4d6f0"
+      const token =
+        "6e9801682e1c89e076de79ed1b8cbf72dad8b37b2e3634531650a22c6ae9206d61deef6f8b62498264fc305dbc312774cd9ff7ae5a505dee101f24492a08e43f0d99dbe68dec9a20b671e298afb2e92ddb07705ff94fd8b2ec726e77b56a18c79302030d977224bb8c314a2d6e99bd5d11188e93968ad00f7507f7af1bf4d6f0";
       return {
         msg: "登录成功",
-        token:token,
+        token: token,
         data: {
-          username,
+          name,
           email,
           id: result.id,
           blocked: result.blocked,
